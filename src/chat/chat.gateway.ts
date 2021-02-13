@@ -1,7 +1,10 @@
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { UseGuards } from '@nestjs/common';
+import { SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { ChatService } from './chat.service';
 
+@UseGuards(JwtAuthGuard)
 @WebSocketGateway()
 export class ChatGateway {
 
