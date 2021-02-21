@@ -4,7 +4,7 @@ import { Server, Socket } from 'socket.io';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { ChatService } from './chat.service';
 
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 @WebSocketGateway()
 export class ChatGateway {
 
