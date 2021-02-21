@@ -31,6 +31,7 @@
     "@nestjs/platform-socket.io": "^7.6.12",
     "@nestjs/swagger": "^4.7.13",
     "@nestjs/websockets": "^7.6.12",
+    "class-validator": "^0.13.1",
     "cross-env": "^7.0.3",
     "mongoose": "^5.11.16",
     "passport": "^0.4.1",
