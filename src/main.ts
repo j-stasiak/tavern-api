@@ -1,9 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import * as helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // app.use(helmet({ contentSecurityPolicy: false,  }));
+  /*app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:6969');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    next();
+  });*/
 
   const config = new DocumentBuilder()
     .setTitle('Tavern API')
