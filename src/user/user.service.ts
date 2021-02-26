@@ -14,7 +14,7 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find();
   }
 
   async findOne(username: string): Promise<UserDocument | undefined> {
@@ -25,8 +25,8 @@ export class UserService {
     return this.userModel.findById(id);
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return await this.userModel.findByIdAndUpdate(id, updateUserDto);
+  async update(username: string, updateUserDto: UpdateUserDto) {
+    return await this.userModel.findOneAndUpdate((user: UserDocument) => user.username == username, updateUserDto);
   }
 
   async remove(id: string) {

@@ -7,13 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // app.use(helmet({ contentSecurityPolicy: false,  }));
-  /*app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:6969');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, api_key, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET');
-    next();
-  });*/
+  app.enableCors({ origin: "*" });
 
   const config = new DocumentBuilder()
     .setTitle('Tavern API')
