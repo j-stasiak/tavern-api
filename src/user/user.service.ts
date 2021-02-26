@@ -18,7 +18,7 @@ export class UserService {
   }
 
   async findOne(nick: string): Promise<UserDocument | undefined> {
-    return this.userModel.findOne((user: UserDocument) => user.nick == nick);
+    return this.userModel.findOne({ nick: nick });
   }
 
   async findOneById(id: string): Promise<UserDocument | undefined> {
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   async update(nick: string, updateUserDto: UpdateUserDto) {
-    return await this.userModel.findOneAndUpdate((user: UserDocument) => user.nick == nick, updateUserDto);
+    return await this.userModel.findOneAndUpdate({ nick: nick }, updateUserDto);
   }
 
   async remove(id: string) {
