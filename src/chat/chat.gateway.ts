@@ -23,6 +23,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('message:client', payload);
   }
 
+  @SubscribeMessage('getYourId')
+  handleGetYourId(client: Socket, payload: any): void {
+    client.emit('your id', client.id);
+  }
+
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     this.server.emit('user:connected', client.id);
@@ -30,6 +35,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
-    this.server.emit('user:disconnected', client.id);
+    client.broadcast.emit('user:disconnected', client.id);
   }
 }
