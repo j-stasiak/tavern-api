@@ -10,19 +10,14 @@ import { UserDocument } from './entities/user.entity';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
   @Get()
   findAll() {
     return this.userService.findAll();
   }
 
-  @Get(':username')
-  findOne(@Param('username') username: string) {
-    return this.userService.findOne(username);
+  @Get(':nick')
+  findOne(@Param('nick') nick: string) {
+    return this.userService.findOne(nick);
   }
 
   @Get(':id')
@@ -30,9 +25,9 @@ export class UserController {
     return this.userService.findOneById(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserDocument> {
-    return this.userService.update(id, updateUserDto);
+  @Put(':nick')
+  update(@Param('nick') nick: string, @Body() updateUserDto: UpdateUserDto): Promise<UserDocument> {
+    return this.userService.update(nick, updateUserDto);
   }
 
   @Delete(':id')
