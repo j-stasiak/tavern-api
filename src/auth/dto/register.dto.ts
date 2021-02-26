@@ -8,7 +8,7 @@ export class RegisterDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  username: string;
+  nick: string;
 
   @ApiProperty()
   @IsNotEmpty()
