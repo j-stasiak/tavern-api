@@ -9,8 +9,8 @@ import { User, UserDocument } from './entities/user.entity';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  create(createUserDto: CreateUserDto): Promise<UserDocument> {
+    return this.userModel.create(createUserDto);
   }
 
   findAll() {
@@ -21,11 +21,15 @@ export class UserService {
     return this.userModel.findOne((user: UserDocument) => user.username == username);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findOneById(id: string): Promise<UserDocument | undefined> {
+    return this.userModel.findById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto);
+  }
+
+  async remove(id: string) {
+    return await this.userModel.findByIdAndRemove(id);
   }
 }
