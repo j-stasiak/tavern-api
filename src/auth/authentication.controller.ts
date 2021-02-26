@@ -5,6 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { JwtAuthGuard } from './strategies/jwt-auth.guard';
 import { LocalAuthGuard } from './strategies/local-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('authentication')
 @Controller('authentication')
@@ -16,10 +17,9 @@ export class AuthenticationController {
     return await this.authenticationService.register(registerDto);
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authenticationService.login(req.user);
+  async login(@Body() loginDto: LoginDto) {
+    return this.authenticationService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)
