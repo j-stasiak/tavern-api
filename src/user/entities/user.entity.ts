@@ -24,7 +24,13 @@ export class User {
   @Prop({ default: 0 })
   reputation: number;
 
-  @Prop()
+  @Prop({
+    default: [{
+      title: 'Witaj w Tavern, Podróżniku!',
+      description: 'Jeśli czujesz się zagubiony zapraszamy do tawerny - znajdziesz ją po lewej stroni mapy.  Możesz tam odpocząć i porozmawiać ze starymi wyjadaczami.\n' +
+        'Jeśli natomiast należysz do bardziej walecznych, spróbuj się na pobliskich kursach, są po prawej stronie.'
+    }]
+  })
   notes: {
     title: string;
     description: string;
