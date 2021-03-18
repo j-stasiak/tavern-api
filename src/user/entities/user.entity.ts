@@ -1,3 +1,4 @@
+import { Roles } from './../../auth/authz/roles';
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from 'mongoose';
 
@@ -8,6 +9,9 @@ export class User {
 
   @Prop({ required: true })
   nick: string;
+
+  @Prop({ type: [String], enum: Roles, default: [Roles.USER] })
+  roles: string[];
 
   @Prop({ required: true })
   email: string;

@@ -1,9 +1,7 @@
-import { UserDocument } from './../user/entities/user.entity';
+import { User, UserDocument } from './../user/entities/user.entity';
 import { Controller, Request, Post, UseGuards, Get, Body } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto } from './dto/register.dto';
-import { JwtAuthGuard } from './strategies/jwt-auth.guard';
-import { LocalAuthGuard } from './strategies/local-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
 
@@ -13,18 +11,15 @@ export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) { }
 
   @Post('register')
-  async register(@Body() registerDto: RegisterDto): Promise<UserDocument> {
-    return await this.authenticationService.register(registerDto);
+  async register(@Body() registerDto: RegisterDto) {
+    const user = await this.authenticationService.register(registerDto);
+    const { password, ...u } = user['_doc'];
+
+    return u;
   }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
-    return this.authenticationService.login(loginDto);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+    return await this.authenticationService.login(loginDto);
   }
 }

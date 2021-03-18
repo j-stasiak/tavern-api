@@ -5,15 +5,16 @@ import { UserService } from './../user/user.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
+import { compare, hash } from 'bcryptjs';
 
 @Injectable()
 export class AuthenticationService {
   constructor(private userService: UserService,
     private jwtService: JwtService) { }
 
-  async validateUser(username: string, pass: string): Promise<Omit<UserDocument, 'password'>> {
+  async validateUser(username: string, pass: string): Promise<UserDocument> {
     const user = await this.userService.findOne(username);
-    if (user && user.password == pass) {
+    if (user && (await compare(pass, user.password))) {
       return user;
     }
     return undefined;
@@ -26,7 +27,7 @@ export class AuthenticationService {
       throw new HttpException('Bad login or password!', HttpStatus.BAD_REQUEST);
     }
 
-    const payload = { user: validUser.nick, sub: validUser.id };
+    const payload = { user: validUser.nick, sub: validUser.id, roles: validUser.roles };
     return {
       access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
       user: validUser,
@@ -35,6 +36,8 @@ export class AuthenticationService {
 
   async register(registerDto: RegisterDto): Promise<UserDocument> {
     const createUserDto: CreateUserDto = registerDto;
-    return this.userService.create(createUserDto);
+    createUserDto.password = await hash(createUserDto.password, 10);
+
+    return await this.userService.create(createUserDto);
   }
 }
