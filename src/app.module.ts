@@ -13,9 +13,11 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     AuthenticationModule,
     MongooseModule.forRoot('mongodb://root:example@mongo:27017/tavern?authSource=admin&w=1'),
-    ConfigModule.forRoot()
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

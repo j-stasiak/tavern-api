@@ -19,16 +19,16 @@ export class TutorialController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tutorialService.findOne(+id);
+    return this.tutorialService.findOne(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateTutorialDto: UpdateTutorialDto) {
-    return this.tutorialService.update(+id, updateTutorialDto);
+    return this.tutorialService.update(id, updateTutorialDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.tutorialService.remove(+id);
+    return this.tutorialService.remove(id);
   }
 }

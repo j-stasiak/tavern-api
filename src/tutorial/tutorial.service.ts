@@ -12,15 +12,15 @@ export class TutorialService {
     return `This action returns all tutorial`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} tutorial`;
   }
 
-  update(id: number, updateTutorialDto: UpdateTutorialDto) {
+  update(id: string, updateTutorialDto: UpdateTutorialDto) {
     return `This action updates a #${id} tutorial`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} tutorial`;
   }
 }

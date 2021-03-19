@@ -4,6 +4,6 @@ import { TutorialController } from './tutorial.controller';
 
 @Module({
   controllers: [TutorialController],
-  providers: [TutorialService]
+  providers: [TutorialService],
 })
 export class TutorialModule {}

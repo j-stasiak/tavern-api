@@ -1,5 +1,11 @@
 import { Logger, UseGuards } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { ChatService } from './chat.service';
@@ -7,11 +13,10 @@ import { ChatService } from './chat.service';
 // @UseGuards(JwtAuthGuard)
 @WebSocketGateway(3001)
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
-
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('ChatGateway');
 
-  constructor(private readonly chatService: ChatService) { }
+  constructor(private readonly chatService: ChatService) {}
 
   afterInit(server: Server) {
     this.logger.log('Initialized!');

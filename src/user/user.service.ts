@@ -8,7 +8,7 @@ import { User, UserDocument } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,) { }
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   create(createUserDto: CreateUserDto): Promise<UserDocument> {
     return this.userModel.create(createUserDto);
@@ -16,10 +16,10 @@ export class UserService {
 
   createDefaultAdmin(): Promise<UserDocument> {
     return this.userModel.create({
-      email: "admin@adm.com",
-      nick: "admin",
-      password: "admin",
-      roles: [Role.ADMIN]
+      email: 'admin@adm.com',
+      nick: 'admin',
+      password: 'admin',
+      roles: [Role.ADMIN],
     });
   }
 
@@ -41,7 +41,7 @@ export class UserService {
 
   async remove(id: string) {
     if (!Types.ObjectId.isValid(id)) {
-      throw new HttpException(`Bad id format: ${id}`, 400)
+      throw new HttpException(`Bad id format: ${id}`, 400);
     }
 
     return await this.userModel.findByIdAndRemove(id);
