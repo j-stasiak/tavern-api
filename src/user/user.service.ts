@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
+import { Role } from 'src/auth/authz/roles';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
@@ -11,6 +12,15 @@ export class UserService {
 
   create(createUserDto: CreateUserDto): Promise<UserDocument> {
     return this.userModel.create(createUserDto);
+  }
+
+  createDefaultAdmin(): Promise<UserDocument> {
+    return this.userModel.create({
+      email: "admin@adm.com",
+      nick: "admin",
+      password: "admin",
+      roles: [Role.ADMIN]
+    });
   }
 
   findAll() {
@@ -30,6 +40,10 @@ export class UserService {
   }
 
   async remove(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      throw new HttpException(`Bad id format: ${id}`, 400)
+    }
+
     return await this.userModel.findByIdAndRemove(id);
   }
 }
