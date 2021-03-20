@@ -1,4 +1,5 @@
-import { Logger, UseGuards } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Logger } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -7,10 +8,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { ChatService } from './chat.service';
 
-// @UseGuards(JwtAuthGuard)
 @WebSocketGateway(3001)
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;

@@ -1,15 +1,17 @@
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './../user/dto/create-user.dto';
-import { UserDocument } from './../user/entities/user.entity';
+import { User, UserDocument } from './../user/entities/user.entity';
 import { UserService } from './../user/user.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { compare, hash } from 'bcryptjs';
+import { Role } from './authz/roles';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private userService: UserService, private jwtService: JwtService) {}
+  constructor(private userService: UserService, private jwtService: JwtService, private configService: ConfigService) {}
 
   async validateUser(username: string, pass: string): Promise<UserDocument> {
     const user = await this.userService.findOne(username);
@@ -35,9 +37,24 @@ export class AuthenticationService {
     };
   }
 
-  async register(registerDto: RegisterDto): Promise<UserDocument> {
-    const createUserDto = Object.assign(new CreateUserDto(), registerDto);
+  async registerDefaultAdmin(): Promise<User> {
+    const user = {
+      avatar: 'none',
+      email: this.configService.get<string>('DEFAULT_ADMIN_EMAIL'),
+      nick: this.configService.get<string>('DEFAULT_ADMIN_LOGIN'),
+      password: this.configService.get<string>('DEFAULT_ADMIN_PASSWORD'),
+      roles: [Role.ADMIN],
+    };
 
+    return await this.register(user);
+  }
+
+  async register(registerDto: RegisterDto): Promise<User> {
+    if (await this.userService.findOne(registerDto.nick)) {
+      throw new HttpException(`User [${registerDto.nick}] already exists!`, 400);
+    }
+
+    const createUserDto = Object.assign(new CreateUserDto(), registerDto);
     createUserDto.password = await hash(createUserDto.password, 10);
 
     return await this.userService.create(createUserDto);

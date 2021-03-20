@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nes
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { UserDocument } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { Roles } from 'src/auth/authz/roles.decorator';
 import { Role } from 'src/auth/authz/roles';
@@ -25,11 +25,6 @@ export class UserController {
   @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.userService.findOneById(id);
-  }
-
-  @Post('/createAdmin')
-  async createAdmin(): Promise<UserDocument> {
-    return await this.userService.createDefaultAdmin();
   }
 
   @UseGuards(JwtAuthGuard)

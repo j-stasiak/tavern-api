@@ -1,7 +1,6 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Role } from 'src/auth/authz/roles';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
@@ -10,17 +9,8 @@ import { User, UserDocument } from './entities/user.entity';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  create(createUserDto: CreateUserDto): Promise<UserDocument> {
+  create(createUserDto: CreateUserDto): Promise<User> {
     return this.userModel.create(createUserDto);
-  }
-
-  createDefaultAdmin(): Promise<UserDocument> {
-    return this.userModel.create({
-      email: 'admin@adm.com',
-      nick: 'admin',
-      password: 'admin',
-      roles: [Role.ADMIN],
-    });
   }
 
   findAll() {
@@ -31,7 +21,7 @@ export class UserService {
     return this.userModel.findOne({ nick: nick });
   }
 
-  async findOneById(id: string): Promise<UserDocument | undefined> {
+  async findOneById(id: string): Promise<User | undefined> {
     return this.userModel.findById(id);
   }
 

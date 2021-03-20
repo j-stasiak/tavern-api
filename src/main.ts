@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle('Tavern API')
     .setDescription('The tavern API description')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

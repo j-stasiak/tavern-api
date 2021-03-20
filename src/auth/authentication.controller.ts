@@ -12,9 +12,15 @@ export class AuthenticationController {
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
     const user = await this.authenticationService.register(registerDto);
-    const { password, ...u } = user['_doc'];
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...u } = user;
 
-    return u;
+    return user;
+  }
+
+  @Post('registerDefaultAdmin')
+  async registerDefaultAdmin() {
+    return await this.authenticationService.registerDefaultAdmin();
   }
 
   @Post('login')
