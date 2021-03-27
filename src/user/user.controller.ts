@@ -1,13 +1,26 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Put,
+  Param,
+  Delete,
+  UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { User, UserDocument } from './entities/user.entity';
+import { UserDocument } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { Roles } from 'src/auth/authz/roles.decorator';
 import { Role } from 'src/auth/authz/roles';
+import { RolesGuard } from 'src/auth/authz/roles.guard';
 
 @ApiTags('user')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,14 +40,12 @@ export class UserController {
     return this.userService.findOneById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Roles(Role.ADMIN)
   @Put(':nick')
   update(@Param('nick') nick: string, @Body() updateUserDto: UpdateUserDto): Promise<UserDocument> {
     return this.userService.update(nick, updateUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Roles(Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string): Promise<UserDocument> {

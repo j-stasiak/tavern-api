@@ -9,8 +9,8 @@ import { User, UserDocument } from './entities/user.entity';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    return this.userModel.create(createUserDto);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    return await this.userModel.create(createUserDto);
   }
 
   findAll() {
