@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     ChatModule,
     UserModule,
     AuthenticationModule,
-    MongooseModule.forRoot('mongodb://root:example@localhost:3137/tavern?authSource=admin&w=1'),
+    MongooseModule.forRoot('mongodb://root:example@mongo:27017/tavern?authSource=admin&w=1'),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
