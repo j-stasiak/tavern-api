@@ -1,18 +1,8 @@
-import {
-  Controller,
-  Get,
-  Body,
-  Put,
-  Param,
-  Delete,
-  UseGuards,
-  ClassSerializerInterceptor,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { UserDocument } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { Roles } from 'src/auth/authz/roles.decorator';
 import { Role } from 'src/auth/authz/roles';
@@ -20,7 +10,6 @@ import { RolesGuard } from 'src/auth/authz/roles.guard';
 
 @ApiTags('user')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@UseInterceptors(ClassSerializerInterceptor)
 @ApiBearerAuth()
 @Controller('user')
 export class UserController {
@@ -32,7 +21,7 @@ export class UserController {
   }
 
   @Get(':nick')
-  async findOne(@Param('nick') nick: string) {
+  async findOne(@Param('nick') nick: string): Promise<Omit<User, 'password'>> {
     return await this.userService.findOne(nick);
   }
 
