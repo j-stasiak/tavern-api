@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserDocument } from './entities/user.entity';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
 import { Roles } from 'src/auth/authz/roles.decorator';
@@ -21,6 +21,7 @@ import { RolesGuard } from 'src/auth/authz/roles.guard';
 @ApiTags('user')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @UseInterceptors(ClassSerializerInterceptor)
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -31,8 +32,8 @@ export class UserController {
   }
 
   @Get(':nick')
-  findOne(@Param('nick') nick: string) {
-    return this.userService.findOne(nick);
+  async findOne(@Param('nick') nick: string) {
+    return await this.userService.findOne(nick);
   }
 
   @Get(':id')

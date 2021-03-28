@@ -13,16 +13,16 @@ export class UserService {
     return await this.userModel.create(createUserDto);
   }
 
-  findAll() {
-    return this.userModel.find();
+  async findAll() {
+    return await this.userModel.find();
   }
 
   async findOne(nick: string): Promise<UserDocument | undefined> {
-    return this.userModel.findOne({ nick: nick });
+    return await this.userModel.findOne({ nick: nick });
   }
 
   async findOneById(id: string): Promise<User | undefined> {
-    return this.userModel.findById(id);
+    return await this.userModel.findById(id);
   }
 
   async update(nick: string, updateUserDto: UpdateUserDto) {
