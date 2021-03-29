@@ -26,7 +26,7 @@ export class UserService {
   }
 
   async update(nick: string, updateUserDto: UpdateUserDto) {
-    return await this.userModel.findOneAndUpdate({ nick: nick }, updateUserDto);
+    return await this.userModel.findOneAndUpdate({ nick: nick }, updateUserDto, { new: true });
   }
 
   async remove(id: string) {
