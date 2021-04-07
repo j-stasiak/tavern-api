@@ -55,6 +55,11 @@ export class AuthenticationService {
     }
 
     const createUserDto = Object.assign(new CreateUserDto(), registerDto);
+
+    if (!createUserDto.roles) {
+      createUserDto.roles = [Role.USER];
+    }
+
     createUserDto.password = await hash(createUserDto.password, 10);
 
     return await this.userService.create(createUserDto);
