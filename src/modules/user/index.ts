@@ -1,1 +1,1 @@
-export { router } from './user-router';
+export * from './user-router';
