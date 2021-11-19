@@ -11,9 +11,7 @@ export const registerUser = async (user: CreateUser): Promise<User> => {
   return await userRepository.save(userEntity);
 };
 
-export const loginUser = async (
-  creds: Credentials
-): Promise<string | undefined> => {
+export const loginUser = async (creds: Credentials): Promise<string | undefined> => {
   const userRepository: Repository<User> = getRepository(User);
   const user =
     creds.username !== undefined

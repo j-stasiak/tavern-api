@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
-import { router as userRouter } from './modules/user';
-import { router as authRouter } from './modules/auth';
-import { checkJwt } from './middleware/check-jwt';
+import { router as userRouter } from './modules/api/user';
+import { router as authRouter } from './modules/api/auth';
 
 const app = express();
 
@@ -14,8 +13,5 @@ app.use(
 );
 app.use('/user', userRouter);
 app.use('/auth', authRouter);
-app.get('/xd', checkJwt, (req, res) => {
-  res.send(`Jwt is working! ${req.user?.username}`);
-});
 
 export { app };
