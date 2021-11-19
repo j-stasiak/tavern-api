@@ -15,7 +15,5 @@ createConnection(typeOrmConfig)
   });
 
 app.listen(port, () => {
-  console.log(
-    `Application is running on port :${port} (On :4000 if running through docker compose).`
-  );
+  console.log(`Application is running on port :${port} (On :4000 if running through docker compose).`);
 });
