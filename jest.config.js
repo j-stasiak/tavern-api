@@ -1,3 +1,5 @@
-export const preset = 'ts-jest';
-export const testEnvironment = 'node';
-export const setupFiles = ['dotenv/config'];
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  setupFiles: ['dotenv/config']
+};
