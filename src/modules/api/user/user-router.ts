@@ -4,8 +4,8 @@ import express from 'express';
 
 const router = express.Router();
 
-// router.post('/', validate(createUserSchema), (req, res) => {
-//   res.send('User created');
-// });
+router.get('/user', (req, res) => {
+  res.send('User returned');
+});
 
 export { router };
