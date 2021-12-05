@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import express from 'express';
-import { router as userRouter } from './modules/api/user';
-import { router as authRouter } from './modules/api/auth';
+import { router as userRouter } from './modules/user';
+import { router as authRouter } from './modules/auth';
 
 const app = express();
 

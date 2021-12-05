@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { getConnection } from 'typeorm';
-import { User } from '../modules/api/user/entities';
+import { User } from '../modules/user/entities';
 
 export const checkJwt = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
