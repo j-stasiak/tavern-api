@@ -12,6 +12,9 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   try {
     const accessToken = await loginUser(req.body as Credentials);
+    if (!accessToken) {
+      throw new Error('Invalid credentials!');
+    }
     res.status(200).send({ access_token: accessToken });
   } catch (error) {
     res.status(500).send({ error: error });
