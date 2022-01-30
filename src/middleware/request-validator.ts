@@ -10,3 +10,13 @@ export const validate = (schema: Joi.Schema) => {
     next();
   };
 };
+
+export const validateParams = (schema: Joi.Schema) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const { error } = schema.validate(req.params);
+    if (error) {
+      res.status(400).send({ error: error.name, details: error.details });
+    }
+    next();
+  };
+};
