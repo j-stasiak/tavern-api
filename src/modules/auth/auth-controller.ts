@@ -17,6 +17,6 @@ export const login = async (req: Request, res: Response) => {
     }
     res.status(200).send({ access_token: accessToken });
   } catch (error) {
-    res.status(500).send({ error: error });
+    res.status(500).send(error);
   }
 };

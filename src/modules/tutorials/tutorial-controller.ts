@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { createTutorial, getTutorialById, getTutorials } from './tutorial-service';
+import { completeTutorial, createTutorial, getTutorialById, getTutorials } from './tutorial-service';
 
 export const postTutorial = async (req: Request, res: Response) => {
   try {
@@ -31,6 +31,18 @@ export const getAllTutorials = async (req: Request, res: Response) => {
     const tutorial = await getTutorials();
 
     res.status(200).send(tutorial);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+export const complete = async (req: Request, res: Response) => {
+  const { user } = req;
+  const { id: tutorialId, step } = req.body;
+  try {
+    const stats = await completeTutorial(user!.id, tutorialId, step);
+
+    res.status(200).send(stats);
   } catch (err) {
     res.status(500).send(err);
   }

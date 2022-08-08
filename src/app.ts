@@ -4,6 +4,7 @@ import cors from 'cors';
 import { router as userRouter } from './modules/user';
 import { router as authRouter } from './modules/auth';
 import { router as tutorialsRouter } from './modules/tutorials';
+import { checkJwtMiddleware } from './middleware/check-jwt';
 
 const app = express();
 
@@ -14,8 +15,8 @@ app.use(
     extended: true
   })
 );
-app.use('/user', userRouter);
 app.use('/auth', authRouter);
-app.use('/tutorial', tutorialsRouter);
+app.use('/user', checkJwtMiddleware, userRouter);
+app.use('/tutorial', checkJwtMiddleware, tutorialsRouter);
 
 export { app };

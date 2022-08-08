@@ -1,4 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Tutorial } from './tutorial';
 
 @Entity()
@@ -20,4 +21,7 @@ export class TutorialStep {
 
   @Column({ default: false })
   isActive!: boolean;
+
+  @Column({ default: 100 })
+  expGrant!: number;
 }

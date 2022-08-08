@@ -1,7 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import { getConnection } from 'typeorm';
+
 import { User } from '../modules/user/entities';
+import { getConnection } from 'typeorm';
+import jwt from 'jsonwebtoken';
 
 export const checkJwtMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -11,8 +12,8 @@ export const checkJwtMiddleware = async (req: Request, res: Response, next: Next
     return;
   }
 
-  const token = authHeader!.split(' ')[1];
-  jwt.verify(token, process.env.JWT_SECRET!, (err, jwt) => {
+  const token = authHeader.split(' ').at(1);
+  jwt.verify(token ?? '', process.env.JWT_SECRET!, (err, jwt) => {
     if (err) {
       res.status(403).send(err);
       return;

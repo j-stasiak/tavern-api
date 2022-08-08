@@ -1,5 +1,7 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import bcrypt from 'bcrypt';
+import { UserInfo } from './user-info';
+import { CompletedTutorial } from '../../tutorials/entities/completed-tutorial';
 
 @Entity()
 export class User {
@@ -23,6 +25,14 @@ export class User {
 
   @Column({ default: false })
   isActive!: boolean;
+
+  @OneToOne(() => UserInfo, (info) => info.user, { cascade: true })
+  @JoinColumn()
+  info!: UserInfo;
+
+  @OneToMany(() => CompletedTutorial, (completedTutorial) => completedTutorial.user)
+  @JoinColumn()
+  completedTutorials!: CompletedTutorial[];
 
   @BeforeInsert()
   hashPassword() {
