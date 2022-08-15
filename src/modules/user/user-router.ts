@@ -1,11 +1,14 @@
+import { deleteUser, getAllUsers, getUser, patchUser } from './user-controller';
+
+import { UserRoles } from './entities';
 import express from 'express';
-// import { validate } from '../../middleware/request-validator';
-// import { createUserSchema } from './schemas';
+import { roleRestrictedRoute } from '../../middleware/role-restricted-route';
 
 const router = express.Router();
 
-// router.post('/', validate(createUserSchema), (req, res) => {
-//   res.send('User created');
-// });
+router.get('/', getAllUsers);
+router.get('/:id', getUser);
+router.patch('/:id', roleRestrictedRoute(UserRoles.MODERATOR), patchUser);
+router.delete('/:id', roleRestrictedRoute(UserRoles.ADMIN), deleteUser);
 
 export { router };

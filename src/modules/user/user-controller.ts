@@ -8,9 +8,9 @@ export const patchUser = async (req: Request, res: Response) => {
   } = req;
 
   try {
-    const tutorial = await updateUser(id, body);
+    const user = await updateUser(id, body);
 
-    res.status(200).send(tutorial);
+    res.status(200).send(user);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -22,9 +22,9 @@ export const deleteUser = async (req: Request, res: Response) => {
   } = req;
 
   try {
-    const tutorial = await removeUser(id);
+    const user = await removeUser(id);
 
-    res.status(200).send(tutorial);
+    res.status(200).send(user);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -36,9 +36,9 @@ export const getUser = async (req: Request, res: Response) => {
       params: { id }
     } = req;
 
-    const tutorial = await getUserById(id);
+    const user = await getUserById(id);
 
-    res.status(200).send(tutorial);
+    res.status(200).send(user);
   } catch (err) {
     res.status(404).send(err);
   }
@@ -46,9 +46,9 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    const tutorial = await getUsers();
+    const users = await getUsers();
 
-    res.status(200).send(tutorial);
+    res.status(200).send(users);
   } catch (err) {
     res.status(500).send(err);
   }

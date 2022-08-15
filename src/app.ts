@@ -1,10 +1,11 @@
 import 'reflect-metadata';
-import express from 'express';
-import cors from 'cors';
-import { router as userRouter } from './modules/user';
+
 import { router as authRouter } from './modules/auth';
+import { checkJwtMiddleware as checkJwt } from './middleware/check-jwt';
+import cors from 'cors';
+import express from 'express';
 import { router as tutorialsRouter } from './modules/tutorials';
-import { checkJwtMiddleware } from './middleware/check-jwt';
+import { router as userRouter } from './modules/user';
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(
   })
 );
 app.use('/auth', authRouter);
-app.use('/user', checkJwtMiddleware, userRouter);
-app.use('/tutorial', checkJwtMiddleware, tutorialsRouter);
+app.use('/user', checkJwt, userRouter);
+app.use('/tutorial', checkJwt, tutorialsRouter);
 
 export { app };

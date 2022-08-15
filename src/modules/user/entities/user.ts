@@ -1,7 +1,14 @@
 import { BeforeInsert, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import bcrypt from 'bcrypt';
-import { UserInfo } from './user-info';
+
 import { CompletedTutorial } from '../../tutorials/entities/completed-tutorial';
+import { UserInfo } from './user-info';
+import bcrypt from 'bcrypt';
+
+export enum UserRoles {
+  USER = 'user',
+  MODERATOR = 'moderator',
+  ADMIN = 'admin'
+}
 
 @Entity()
 export class User {
@@ -25,6 +32,9 @@ export class User {
 
   @Column({ default: false })
   isActive!: boolean;
+
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
+  role!: string;
 
   @OneToOne(() => UserInfo, (info) => info.user, { cascade: true })
   @JoinColumn()
