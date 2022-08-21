@@ -4,6 +4,8 @@ import { User, UserRank } from '../user/entities';
 import { CompletedTutorial } from './entities/completed-tutorial';
 import { CreateTutorialDto } from './dtos/create-tutorial';
 import { Tutorial } from './entities/tutorial';
+import { TutorialStep } from './entities/tutorial-step';
+import { UpdateTutorial } from './dtos/update-tutorial';
 
 const rankLevelRequirements: { [k: number]: UserRank } = {
   1: UserRank.NOVICE,
@@ -21,6 +23,23 @@ export const createTutorial = async (createTutorial: CreateTutorialDto) => {
   });
 
   return result;
+};
+
+export const updateTutorial = async (id: string, updateTutorial: UpdateTutorial) => {
+  const tutorialRepository: Repository<Tutorial> = getRepository(Tutorial);
+  const tutorialStepsRepository: Repository<TutorialStep> = getRepository(TutorialStep);
+  const { steps, ...tutorialToUpdate } = updateTutorial;
+
+  await tutorialRepository.update(id, tutorialToUpdate);
+
+  if (steps && steps.length > 0) {
+    await Promise.all(
+      steps.map((step) => {
+        const { id, ...stepToUpdate } = step;
+        return tutorialStepsRepository.update(id!, stepToUpdate);
+      })
+    );
+  }
 };
 
 export const getTutorialById = async (id: string) => {

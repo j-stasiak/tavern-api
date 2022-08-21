@@ -1,10 +1,25 @@
 import type { Request, Response } from 'express';
-import { completeTutorial, createTutorial, getTutorialById, getTutorials } from './tutorial-service';
+import { completeTutorial, createTutorial, getTutorialById, getTutorials, updateTutorial } from './tutorial-service';
 
 export const postTutorial = async (req: Request, res: Response) => {
   try {
     const { body } = req;
     const insertedId = await createTutorial(body);
+
+    res.status(201).send(insertedId);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+export const patchTutorial = async (req: Request, res: Response) => {
+  try {
+    const {
+      body,
+      params: { id }
+    } = req;
+
+    const insertedId = await updateTutorial(id, body);
 
     res.status(201).send(insertedId);
   } catch (err) {
