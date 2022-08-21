@@ -24,4 +24,7 @@ export class TutorialStep {
 
   @Column({ default: 100 })
   expGrant!: number;
+
+  @Column({ nullable: true })
+  expectedResult!: string;
 }
