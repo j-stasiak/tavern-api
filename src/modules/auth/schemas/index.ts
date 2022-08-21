@@ -3,7 +3,8 @@ import Joi from 'joi';
 export const createUserSchema: Joi.Schema = Joi.object({
   username: Joi.string().min(3).max(30).required(),
   password: Joi.string().min(6).max(80).required(),
-  email: Joi.string().email().required()
+  email: Joi.string().email().required(),
+  role: Joi.string()
 });
 
 export const credentialsSchema: Joi.Schema = Joi.object({
