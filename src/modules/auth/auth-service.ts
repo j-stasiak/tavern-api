@@ -28,6 +28,7 @@ export const loginUser = async (creds: CredentialsDto): Promise<string | undefin
         email: user.email,
         info: user.info,
         completedTutorials: user.completedTutorials,
+        role: user.role,
         iat: Date.now()
       },
       process.env.JWT_SECRET!
