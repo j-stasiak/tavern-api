@@ -4,6 +4,7 @@ export const createTutorialStepsSchema: Joi.Schema = Joi.object({
   title: Joi.string().optional(),
   description: Joi.string().required(),
   stepNumber: Joi.number().required(),
+  expectedResult: Joi.string().optional(),
   isActive: Joi.boolean().optional().default(true)
 });
 

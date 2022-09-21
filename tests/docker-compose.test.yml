@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: postgres-test
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    restart: !!str no
+    environment:
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=postgres-test
+      - POSTGRES_DB=test
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_password
+    logging:
+      driver: none

@@ -20,7 +20,7 @@ export const checkJwtMiddleware = async (req: Request, res: Response, next: Next
     }
     getConnection()
       .getRepository(User)
-      .findOneOrFail(jwt!.sub)
+      .findOneOrFail(jwt!.sub as string)
       .then((user) => {
         req.user = user;
         next();

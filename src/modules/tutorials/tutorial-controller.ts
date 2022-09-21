@@ -2,23 +2,23 @@ import type { Request, Response } from 'express';
 import { completeTutorial, createTutorial, getTutorialById, getTutorials, updateTutorial } from './tutorial-service';
 
 export const postTutorial = async (req: Request, res: Response) => {
+  const { body } = req;
   try {
-    const { body } = req;
     const insertedId = await createTutorial(body);
 
     res.status(201).send(insertedId);
+    return;
   } catch (err) {
     res.status(500).send(err);
   }
 };
 
 export const patchTutorial = async (req: Request, res: Response) => {
+  const {
+    body,
+    params: { id }
+  } = req;
   try {
-    const {
-      body,
-      params: { id }
-    } = req;
-
     const insertedId = await updateTutorial(id, body);
 
     res.status(201).send(insertedId);
@@ -52,10 +52,13 @@ export const getAllTutorials = async (req: Request, res: Response) => {
 };
 
 export const complete = async (req: Request, res: Response) => {
-  const { user } = req;
-  const { id: tutorialId, step } = req.body;
+  const {
+    user,
+    params: { id }
+  } = req;
+  const { step } = req.body;
   try {
-    const stats = await completeTutorial(user!.id, tutorialId, step);
+    const stats = await completeTutorial(user!.id, id, step);
 
     res.status(200).send(stats);
   } catch (err) {

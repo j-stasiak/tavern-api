@@ -14,7 +14,7 @@ export const roleRestrictedRoute =
     const userRole = req.user!.role as UserRoles;
 
     if (permissionLevel[userRole] >= permissionLevel[requiredRole]) {
-      next();
+      return next();
     }
 
     res.status(403).send({ message: "You don't have a permission to access this resource!" });

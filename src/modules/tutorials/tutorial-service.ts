@@ -30,16 +30,19 @@ export const updateTutorial = async (id: string, updateTutorial: UpdateTutorial)
   const tutorialStepsRepository: Repository<TutorialStep> = getRepository(TutorialStep);
   const { steps, ...tutorialToUpdate } = updateTutorial;
 
-  await tutorialRepository.update(id, tutorialToUpdate);
+  const tutorial = await tutorialRepository.update(id, tutorialToUpdate);
 
   if (steps && steps.length > 0) {
     await Promise.all(
       steps.map((step) => {
         const { id, ...stepToUpdate } = step;
+        console.log(stepToUpdate);
         return tutorialStepsRepository.update(id!, stepToUpdate);
       })
     );
   }
+
+  return tutorial;
 };
 
 export const getTutorialById = async (id: string) => {
@@ -63,45 +66,43 @@ export const completeTutorial = async (userId: string, tutorialId: string, step?
 
   const tutorial = await tutorialRepository.findOneOrFail(tutorialId, { relations: ['steps'] });
   const user = await userRepository.findOneOrFail(userId, { relations: ['info'] });
-  const completedTutorial = await completedTutorialsRepository.findOne({ tutorial: { id: tutorialId }, user: user });
 
-  if (completedTutorial) {
-    if (!completedTutorial.isFinished && step && completedTutorial.finishedSteps < step) {
-      if (step > tutorial.stepsAmount) {
-        throw new Error(`Step ${step} not found in this tutorial.`);
-      }
-      const expGranted = tutorial.steps.find((ts) => ts.stepNumber === step)!.expGrant;
-      user.info = addExp(user, expGranted);
-      userRepository.save(user);
-      completedTutorial.finishedSteps = step;
-      completedTutorialsRepository.save(completedTutorial);
-    }
-
-    if (!step) {
-      completedTutorial.finishedSteps = tutorial.stepsAmount;
-      completedTutorial.isFinished = true;
-      completedTutorialsRepository.save(completedTutorial);
-    }
-  } else {
-    const isFinished = !!step || tutorial.stepsAmount === step;
-    const completedTutorialToSave = completedTutorialsRepository.create({
-      finishedSteps: step,
-      isFinished,
+  const completedTutorial =
+    (await completedTutorialsRepository.findOne({ tutorial: { id: tutorialId }, user: user })) ??
+    completedTutorialsRepository.create({
+      finishedSteps: 0,
+      isFinished: false,
       tutorial: tutorial,
       user: user
     });
 
-    completedTutorialsRepository.save(completedTutorialToSave);
+  const tutorialStep = step ?? tutorial.stepsAmount;
+
+  if (completedTutorial.finishedSteps < tutorialStep) {
+    if (tutorialStep > tutorial.stepsAmount) {
+      throw new Error(`Step ${step} not found in this tutorial.`);
+    }
+    const expGranted = tutorial.steps
+      .map((step) => (step.stepNumber > completedTutorial.finishedSteps ? step.expGrant : 0))
+      .reduce((a, b) => a + b, 0);
+
+    user.info = addExp(user, expGranted);
+    userRepository.save(user);
+
+    completedTutorial.finishedSteps = tutorialStep;
+    completedTutorial.isFinished = tutorialStep === tutorial.stepsAmount;
+    completedTutorialsRepository.save(completedTutorial);
   }
 };
 
 const addExp = (user: User, amount: number) => {
   const { info } = user;
   const expSum = info.experience + amount;
+  const levelsToAdd = Math.floor(expSum / info.experienceToNextLevel);
 
   info.experience = expSum % info.experienceToNextLevel;
   if (expSum >= info.experienceToNextLevel) {
-    info.level += 1;
+    info.level += levelsToAdd;
   }
 
   info.rank = adjustRank(user);
