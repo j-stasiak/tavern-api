@@ -30,7 +30,8 @@ describe('tutorials', () => {
 
   beforeAll(async () => {
     await testManager.init();
-    const loginData = await testManager.loginTestUser({ username: 'test', password: 'test', email: 'test@test.com' });
+    const creds = { username: 'test', password: 'test', email: 'test@test.com' };
+    const loginData = await testManager.loginTestUser(creds);
     token = loginData.jwt;
     user = loginData.user;
   });
@@ -107,7 +108,7 @@ describe('tutorials', () => {
 
   describe('POST /tutorial/:id/complete', () => {
     afterEach(async () => {
-      await testManager.cleanDatabase(['tutorial']);
+      await testManager.cleanDatabase(['tutorial', 'completed_tutorial']);
     });
 
     it('should complete whole tutorial', async () => {
@@ -116,14 +117,9 @@ describe('tutorials', () => {
         .send(tutorialData)
         .set('authorization', `Bearer ${token}`);
 
-      await testManager.testApp
-        .post(`/tutorial/${result.body.id}/complete`)
-        .send({ title: 'Beginner tutorial 1' })
-        .set('authorization', `Bearer ${token}`);
+      await testManager.testApp.post(`/tutorial/${result.body.id}/complete`).set('authorization', `Bearer ${token}`);
 
       const userResult = await testManager.testApp.get(`/user/${user.id}`).set('authorization', `Bearer ${token}`);
-
-      console.log(userResult.body);
 
       expect(userResult.body.info.level).toEqual(2);
       expect(userResult.body.info.experience).toEqual(0);
