@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { CreateTutorialDto } from '../../src/modules/tutorials/dtos/create-tutorial';
 import { TutorialStep } from '../../src/modules/tutorials/entities/tutorial-step';
 import { User, UserRank } from '../../src/modules/user/entities';
@@ -90,7 +91,12 @@ describe('tutorials', () => {
       .patch(`/tutorial/${result.body.id}`)
       .send({
         title: 'Beginner tutorial 1',
-        steps: [{ id: result.body.steps[0].id, title: 'Beginner tutorial pt. 1' }]
+        steps: [
+          {
+            id: result.body.steps[0].id,
+            title: 'Beginner tutorial pt. 1'
+          }
+        ]
       })
       .set('authorization', `Bearer ${token}`);
 

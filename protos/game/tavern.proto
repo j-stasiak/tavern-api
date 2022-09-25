@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+service Tavern {
+    rpc SendMessage (CreateChatMessage) returns (ChatMessageId);
+    rpc LikeMessage (ChatMessageId) returns (LikeCount);
+}
+
+message CreateChatMessage {
+    string userId = 1;
+    string message = 2;
+}
+
+message ChatMessageId {
+    string id = 1;
+}
+
+message LikeCount {
+    int32 count = 1;
+}

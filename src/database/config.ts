@@ -14,6 +14,8 @@ export const typeOrmConfig: ConnectionOptions = {
   migrationsRun: false
 };
 
+console.log(typeOrmConfig.url);
+
 export const testConfig: ConnectionOptions = {
   name: 'default',
   type: 'postgres',

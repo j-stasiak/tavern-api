@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { getChatHistoryForUser } from '../chat/chat-service';
 import { getUserById, getUsers, removeUser, updateUser } from './user-service';
 
 export const patchUser = async (req: Request, res: Response) => {
@@ -41,6 +42,20 @@ export const getUser = async (req: Request, res: Response) => {
     res.status(200).send(user);
   } catch (err) {
     res.status(404).send(err);
+  }
+};
+
+export const getUserChatHistory = async (req: Request, res: Response) => {
+  try {
+    const {
+      params: { id }
+    } = req;
+
+    const chatMessages = await getChatHistoryForUser(id);
+
+    res.status(200).send(chatMessages);
+  } catch (err) {
+    res.status(500).send(err);
   }
 };
 
