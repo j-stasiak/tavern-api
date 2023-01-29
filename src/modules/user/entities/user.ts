@@ -36,11 +36,11 @@ export class User {
   @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
   role!: string;
 
-  @OneToOne(() => UserInfo, (info) => info.user, { cascade: true })
+  @OneToOne(() => UserInfo, (info) => info.user, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   info!: UserInfo;
 
-  @OneToMany(() => CompletedTutorial, (completedTutorial) => completedTutorial.user)
+  @OneToMany(() => CompletedTutorial, (completedTutorial) => completedTutorial.user, { onDelete: 'CASCADE' })
   @JoinColumn()
   completedTutorials!: CompletedTutorial[];
 

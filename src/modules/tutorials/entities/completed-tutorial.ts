@@ -8,7 +8,7 @@ export class CompletedTutorial {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @ManyToOne(() => User, (user) => user.completedTutorials)
+  @ManyToOne(() => User, (user) => user.completedTutorials, { onDelete: 'CASCADE' })
   user!: User;
 
   @ManyToOne(() => Tutorial)

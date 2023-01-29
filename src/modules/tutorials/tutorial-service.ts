@@ -29,15 +29,26 @@ export const updateTutorial = async (id: string, updateTutorial: UpdateTutorial)
   const tutorialRepository: Repository<Tutorial> = getRepository(Tutorial);
   const tutorialStepsRepository: Repository<TutorialStep> = getRepository(TutorialStep);
   const { steps, ...tutorialToUpdate } = updateTutorial;
-
-  const tutorial = await tutorialRepository.update(id, tutorialToUpdate);
+  const tutorial = await tutorialRepository.findOneOrFail(id);
+  await tutorialRepository.update(id, { ...tutorialToUpdate, stepsAmount: steps.length });
 
   if (steps && steps.length > 0) {
     await Promise.all(
       steps.map((step) => {
         const { id, ...stepToUpdate } = step;
-        console.log(stepToUpdate);
-        return tutorialStepsRepository.update(id!, stepToUpdate);
+        if (id) {
+          return tutorialStepsRepository.update(id!, stepToUpdate);
+        }
+      })
+    );
+
+    await Promise.all(
+      steps.map((step) => {
+        const { id, ...stepToUpdate } = step;
+        if (!id) {
+          const entity = tutorialStepsRepository.create({...stepToUpdate, parent: tutorial });
+          return tutorialStepsRepository.save(entity);
+        }
       })
     );
   }
@@ -87,11 +98,11 @@ export const completeTutorial = async (userId: string, tutorialId: string, step?
       .reduce((a, b) => a + b, 0);
 
     user.info = addExp(user, expGranted);
-    userRepository.save(user);
+    await userRepository.save(user);
 
     completedTutorial.finishedSteps = tutorialStep;
     completedTutorial.isFinished = tutorialStep === tutorial.stepsAmount;
-    completedTutorialsRepository.save(completedTutorial);
+    await completedTutorialsRepository.save(completedTutorial);
   }
 };
 

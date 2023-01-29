@@ -25,6 +25,6 @@ grpcServer.bindAsync(`0.0.0.0:${process.env.GRPC_SERVER_PORT}`, ServerCredential
     throw new Error('Failed to run grpc server');
   }
 
-  console.log(`Grpc server running on port ${port}`);
+  console.log(`Grpc server running on port ${process.env.GRPC_SERVER_PORT}`);
   grpcServer.start();
 });
